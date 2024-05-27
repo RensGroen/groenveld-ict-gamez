@@ -1,0 +1,6 @@
+flow voor aanmaken nieuwe game/sessie:
+
+- HTTP post call met enkel de userIdsPlaying parameter.
+- In de return body staat wie wie toegewezen krijgt (dit mag random zijn, scheelt hoop programmeerwerk, als je gek wil doen kan je het op basis van sessie history doen)
+- Client doet een nieuwe POST call met PlayerDetailsRequest in body en deze wordt door de server aan de sessie toegewezen.
+- Wanneer een game klaar is, wordt er een nieuwe post gedaan om deze game op te slaan in de database.
