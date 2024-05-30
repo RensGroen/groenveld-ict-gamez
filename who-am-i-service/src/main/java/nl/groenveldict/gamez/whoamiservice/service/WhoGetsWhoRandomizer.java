@@ -1,6 +1,5 @@
 package nl.groenveldict.gamez.whoamiservice.service;
 
-import nl.groenveldict.gamez.whoamiservice.dto.NewGameResponse;
 import nl.groenveldict.gamez.whoamiservice.dto.PlayerDetailsResponse;
 
 import java.util.ArrayList;
