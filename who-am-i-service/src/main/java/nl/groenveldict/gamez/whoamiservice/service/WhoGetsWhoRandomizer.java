@@ -18,7 +18,6 @@ public class WhoGetsWhoRandomizer {
                                                 .userId(userIdsPlaying.get(index))
                                                 .opponentId(determineOpponentId(userIdsPlaying, index))
                                                 .build());
-
         }
 
         return playerDetails.stream()
