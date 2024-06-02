@@ -1,14 +1,13 @@
 package nl.groenveldict.gamez.whoamiservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import nl.groenveldict.gamez.whoamiservice.dto.FinishExistingGameRequest;
 import nl.groenveldict.gamez.whoamiservice.dto.NewGameRequest;
 import nl.groenveldict.gamez.whoamiservice.dto.NewGameResponse;
 import nl.groenveldict.gamez.whoamiservice.dto.UpdatingExistingGameRequest;
 import nl.groenveldict.gamez.whoamiservice.service.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/game")
@@ -26,6 +25,13 @@ public class GameController {
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateExistingGame(@RequestBody UpdatingExistingGameRequest existingGameRequest) throws GameNotExistsException {
-        gameService.updateExistingGame(existingGameRequest);
+        gameService.addPlayerDetailsToExistingGame(existingGameRequest);
+    }
+
+    @PutMapping
+    @RequestMapping("/finish")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finishExistingGame(@RequestBody FinishExistingGameRequest finishExistingGameRequest) throws GameNotExistsException {
+        gameService.finishExistingGame(finishExistingGameRequest);
     }
 }

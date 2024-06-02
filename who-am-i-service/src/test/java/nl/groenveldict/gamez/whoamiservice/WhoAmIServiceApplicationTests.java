@@ -119,5 +119,78 @@ class WhoAmIServiceApplicationTests {
 		Assertions.assertTrue(s.isPresent());
 		Assertions.assertEquals("King Kong",s.get().getPlayerDetails().get(0).getPerson());
 		Assertions.assertEquals("Linus Torvalds",s.get().getPlayerDetails().get(1).getPerson());
+		Assertions.assertFalse(s.get().isEnded());
+	}
+
+	@Test
+	void finishExistingGameShouldHandleNonExistingGameCorrectly() {
+		String requestBody =
+				"""
+				{
+					"id" : "nonExistingId",
+					"userIdLost" : 1
+				}
+				""";
+
+		RestAssured.given()
+				.contentType("application/json")
+				.body(requestBody)
+				.when()
+				.put("api/game")
+				.then()
+				.statusCode(404);
+	}
+
+	@Test
+	void finishExistingGameShouldUpdateExistingGameCorrectly() {
+		String requestBody =
+				"""
+				{
+					"userIdsPlaying" : [1,2]
+				}
+				""";
+
+		String id = RestAssured.given()
+				.contentType("application/json")
+				.body(requestBody)
+				.when()
+				.post("api/game")
+				.then()
+				.extract()
+				.path("id");
+
+		requestBody =
+				"""
+				{
+					"id" : "${id}",
+					"playerDetails" : [{"userId": 1, "opponentId": 2, "person": "King Kong"}, {"userId": 2, "opponentId": 1, "person": "Linus Torvalds"}]
+				}
+				""".replace("${id}", id);
+
+		RestAssured.given()
+				.contentType("application/json")
+				.body(requestBody)
+				.when()
+				.put("api/game");
+
+		requestBody =
+				"""
+				{
+					"id" : "${id}",
+					"userIdLost" : 2
+				}
+				""".replace("${id}", id);
+
+		RestAssured.given()
+				.contentType("application/json")
+				.body(requestBody)
+				.when()
+				.put("api/game/finish");
+
+		Optional<Game> s = gameRepository.findById(id);
+
+		Assertions.assertTrue(s.isPresent());
+		Assertions.assertEquals(2, s.get().getUserIdLost());
+		Assertions.assertTrue(s.get().isEnded());
 	}
 }

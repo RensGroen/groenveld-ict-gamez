@@ -72,7 +72,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void gameServiceShouldUpdateExistingGameCorrectly() throws GameNotExistsException {
+    public void gameServiceShouldAddPlayerDetailsToExistingGameCorrectly() throws GameNotExistsException {
         //given
         UpdatingExistingGameRequest gameRequest = UpdatingExistingGameRequest.builder()
                 .id("anyId")
@@ -107,7 +107,7 @@ public class GameServiceTest {
         when(gameRepositoryMock.findById("anyId")).thenReturn(Optional.of(game));
 
         //when
-        gameService.updateExistingGame(gameRequest);
+        gameService.addPlayerDetailsToExistingGame(gameRequest);
 
         //then
         verify(gameRepositoryMock).save(gameCaptor.capture());
@@ -122,7 +122,7 @@ public class GameServiceTest {
     }
 
     @Test()
-    public void gameServiceShouldThrowCorrectExceptionWhenGameCannotBeFound() {
+    public void gameServiceShouldThrowCorrectExceptionWhenGameCannotBeFoundUponAddingUserDetails() {
         //given
         UpdatingExistingGameRequest gameRequest = UpdatingExistingGameRequest.builder()
                 .id("anyId")
@@ -143,7 +143,7 @@ public class GameServiceTest {
 
         //then
         GameNotExistsException exception = assertThrows(GameNotExistsException.class, () -> {
-            gameService.updateExistingGame(gameRequest);
+            gameService.addPlayerDetailsToExistingGame(gameRequest);
         });
 
         Assertions.assertEquals("Game with id anyId not found.", exception.getMessage());
